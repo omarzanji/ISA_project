@@ -15,8 +15,8 @@ architecture Behavioral of mux21_tb is
     end component;
 
     signal sel_tb : std_logic;
-    signal a_tb : std_logic_vector(15 downto 0) := (others => '1');
-    signal b_tb : std_logic_vector(15 downto 0) := (others => '0');
+    signal a_tb : std_logic_vector(15 downto 0) := "0000000000001010";
+    signal b_tb : std_logic_vector(15 downto 0) := "0000000000001011";
 
 begin
 

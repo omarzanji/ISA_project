@@ -10,6 +10,7 @@ entity alu is
     ALUop     : in std_logic_vector (3 downto 0);  -- ALU operation.
     Op1       : in signed (N-1 downto 0);  -- Op1.
     Op2       : in signed (N-1 downto 0);  -- Op2.
+    RST       : in std_logic;
     Dout      : out signed (N-1 downto 0);  -- Dout.
     Zero      : out std_logic;  -- Zero flag
     Negative  : out std_logic);  -- Negative flag.
@@ -36,9 +37,9 @@ begin
       when "0011" =>  -- OR
         Dout_signal <= op1 or op2;
       when "0100" =>  -- Shift Left Logical
-        Dout_signal <= signed(unsigned(op1) sll 1);
+        Dout_signal <= op1 sll 1;
       when "0101" =>  -- Shift Rigt Logical
-        Dout_signal <= signed(unsigned(op1) srl 1);
+        Dout_signal <= op1 srl 1;
       when others => Dout_signal <= Op1 + Op2;
     end case;
   end process;

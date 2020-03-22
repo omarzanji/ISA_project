@@ -16,6 +16,7 @@ architecture Behavioral of register_file_tb is
     signal Rd_Addr_tb   : std_logic_vector (M-1 downto 0) := (others => '0');  -- Rd
     signal Din_tb       : std_logic_vector (N-1 downto 0);  -- Din
     signal WE_tb        : std_logic := '0';  -- Write Enable, behaves as CLK for the model.
+    signal RST_tb          : std_logic := '0';  -- Write Enable, behaves as CLK for the model.
     signal Rs1_out_tb  : std_logic_vector (N-1 downto 0) := (others => '0');  -- Rs1
     signal Rs2_out_tb  : std_logic_vector (N-1 downto 0) := (others => '0');  -- Rs1
 
@@ -29,6 +30,7 @@ architecture Behavioral of register_file_tb is
         Rd_Addr   : in std_logic_vector (M-1 downto 0);
         Din : in std_logic_vector (N-1 downto 0);  -- Data to store.
         WE  : in std_logic := '0';  -- Write Enable, behaves as CLK for the model.
+        RST : in std_logic;
         Rs1_out : out std_logic_vector (N-1 downto 0);
         Rs2_out : out std_logic_vector (N-1 downto 0));  -- Output from Read Address.
     end component;
@@ -39,25 +41,28 @@ architecture Behavioral of register_file_tb is
     generic map (N => N, M => M)
     port map ( Rs1_Addr => Rs1_Addr_tb, Rs2_Addr => Rs2_Addr_tb,
       Rd_Addr => Rd_Addr_tb, Din => Din_tb, WE => WE_tb,
-      Rs1_out => Rs1_out_tb, Rs2_out => Rs2_out_tb);
+      RST => RST_tb, Rs1_out => Rs1_out_tb, Rs2_out => Rs2_out_tb);
 
     Din_tb <= "1001111110011111";
 
 testProc : process
     begin
+    RST_tb <= '1';
+    wait for 100 ns;
+    RST_tb <= '0';
+    wait for 100 ns;
+    Rd_Addr_tb <= "00000";
     Rs1_Addr_tb <= "00000";
-    Rd_Addr_tb  <= "00011";
+    Rs2_Addr_tb <= "00001";
+    WE_tb <= '1';
+    wait for 100 ns;
+    WE_tb <= '0';
+    Rd_Addr_tb <= "00001";
     wait for 100 ns;
     WE_tb <= '1';
     wait for 100 ns;
     WE_tb <= '0';
-    Rd_Addr_tb  <= "00001";
-    Rs1_Addr_tb  <= "00011";
-    wait for 100 ns;
-    WE_tb <= '1';
-    wait for 100 ns;
-    Rs2_Addr_tb <= "00001";
-
+    wait for 1000 ns;
     end process;
 
 end Behavioral;
