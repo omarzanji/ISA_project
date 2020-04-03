@@ -11,9 +11,9 @@ end alu_tb;
 architecture Behavioral of alu_tb is
 
   signal ALUop_tb     :  std_logic_vector (3 downto 0);  -- ALU operation.
-  signal Op1_tb       :  signed (N_tb-1 downto 0);  -- Op1.
-  signal Op2_tb       :  signed (N_tb-1 downto 0);  -- Op2.
-  signal Dout_tb      :  signed (N_tb-1 downto 0);  -- Dout.
+  signal Op1_tb       :  std_logic_vector (N_tb-1 downto 0);  -- Op1.
+  signal Op2_tb       :  std_logic_vector (N_tb-1 downto 0);  -- Op2.
+  signal Dout_tb      :  std_logic_vector (N_tb-1 downto 0);  -- Dout.
   signal Zero_tb      :  std_logic := '0';  -- Zero flag
   signal Negative_tb  :  std_logic := '0';  -- Negative flag.
 
@@ -22,9 +22,9 @@ component alu is
     N : integer := 16);  -- N-bits size of word.
   Port (
     ALUop     : in std_logic_vector (3 downto 0);  -- ALU operation.
-    Op1       : in signed (N-1 downto 0);  -- Op1.
-    Op2       : in signed (N-1 downto 0);  -- Op2.
-    Dout      : out signed (N-1 downto 0);  -- Dout.
+    Op1       : in std_logic_vector (N-1 downto 0);  -- Op1.
+    Op2       : in std_logic_vector (N-1 downto 0);  -- Op2.
+    Dout      : out std_logic_vector (N-1 downto 0);  -- Dout.
     Zero      : out std_logic;  -- Zero flag
     Negative  : out std_logic);  -- Negative flag.
 end component;

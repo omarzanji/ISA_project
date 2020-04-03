@@ -42,14 +42,14 @@ begin
     if RST = '0' then
       opcode_tmp <= opcode;
     else
-      opcode_tmp <= "0001";
+      opcode_tmp <= "0000";
     end if;
   end process;
   
   process(opcode_tmp)
     begin
     case (opcode_tmp) is
-      when "0000" =>  -- ADD
+      when "0001" =>  -- ADD
         Load_tmp  <= '1';
         Store_tmp <= '0';
         Jump_tmp  <= '0';

@@ -9,6 +9,7 @@ entity register_file is
     N : integer := 16;  -- N-bits size of word.
     M : integer := 5); -- Size of RAM block. 2^M registers of N bits each.
   Port (
+    clk       : in std_logic;
     Rs1_Addr  : in std_logic_vector (M-1 downto 0);  -- Read address.
     Rs2_Addr  : in std_logic_vector (M-1 downto 0);  -- Read address.
     Rd_Addr   : in std_logic_vector (M-1 downto 0);
@@ -26,7 +27,7 @@ architecture Behavioral of register_file is
   signal STARTUP: boolean := true;
   begin
 
-      process(RST, Rs1_Addr, Rs2_Addr, Rd_Addr, Din, WE)
+      process(RST, clk, Rs1_Addr, Rs2_Addr, Din, Rd_Addr, WE)
         variable RAM_ADDR_IN1: integer range 0 to 2**M-1;  -- RS1
         variable RAM_ADDR_IN2: integer range 0 to 2**M-1;  -- RS2
         variable RAM_ADDR_IN3: integer range 0 to 2**M-1;  -- RD
@@ -34,21 +35,24 @@ architecture Behavioral of register_file is
               if RST = '1' then
                 STARTUP <= true;
               end if;
-              if (STARTUP = true) then
-                RAM_BLOCK <= (others => "0000000000000000");
-                Rs1_out <= "XXXXXXXXXXXXXXXX";
-                Rs2_out <= "XXXXXXXXXXXXXXXX";
-                STARTUP <= false;
-              else
-                RAM_ADDR_IN1 := conv_integer(Rs1_Addr);
-                RAM_ADDR_IN2 := conv_integer(Rs2_Addr);
-                RAM_ADDR_IN3 := conv_integer(Rd_Addr);
-                if (WE='1') then
-                  RAM_BLOCK(RAM_ADDR_IN3) <= Din;
-                end if;
-                Rs1_out <= RAM_BLOCK(RAM_ADDR_IN1);
-                Rs2_out <= RAM_BLOCK(RAM_ADDR_IN2);
-             end if;
-          end process;
+              if clk='1' then
+                  if (STARTUP = true) then
+                    RAM_BLOCK <= (others => "0000000000000000");
+                    Rs1_out <= "XXXXXXXXXXXXXXXX";
+                    Rs2_out <= "XXXXXXXXXXXXXXXX";
+                    STARTUP <= false;
+                  else
+                    RAM_ADDR_IN1 := conv_integer(Rs1_Addr);
+                    RAM_ADDR_IN2 := conv_integer(Rs2_Addr);
+                    RAM_ADDR_IN3 := conv_integer(Rd_Addr);
+                    Rs1_out <= RAM_BLOCK(RAM_ADDR_IN1);
+                    Rs2_out <= RAM_BLOCK(RAM_ADDR_IN2);
+                 end if;
+               else
+               if (WE='1' and clk='0')  then
+                 RAM_BLOCK(RAM_ADDR_IN3) <= Din;
+               end if;
+              end if;
+      end process;
 
 end Behavioral;

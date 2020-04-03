@@ -10,7 +10,8 @@ entity register_file_tb is
 end register_file_tb;
 
 architecture Behavioral of register_file_tb is
-
+    
+    signal clk_tb        : std_logic;
     signal Rs1_Addr_tb  : std_logic_vector (M-1 downto 0) := (others => '0');  -- Rs1
     signal Rs2_Addr_tb  : std_logic_vector (M-1 downto 0) := (others => '0');  -- Rs2
     signal Rd_Addr_tb   : std_logic_vector (M-1 downto 0) := (others => '0');  -- Rd
@@ -25,6 +26,7 @@ architecture Behavioral of register_file_tb is
         N : integer := 16;  -- N-bits size of word.
         M : integer := 5); -- Size of RAM block. 2^M registers of N bits each.
       Port (
+        clk       : in std_logic;
         Rs1_Addr  : in std_logic_vector (M-1 downto 0);  -- Read address.
         Rs2_Addr  : in std_logic_vector (M-1 downto 0);  -- Read address.
         Rd_Addr   : in std_logic_vector (M-1 downto 0);
@@ -39,7 +41,7 @@ architecture Behavioral of register_file_tb is
 
     REG_FILE : register_file
     generic map (N => N, M => M)
-    port map ( Rs1_Addr => Rs1_Addr_tb, Rs2_Addr => Rs2_Addr_tb,
+    port map ( clk=>clk_tb,Rs1_Addr => Rs1_Addr_tb, Rs2_Addr => Rs2_Addr_tb,
       Rd_Addr => Rd_Addr_tb, Din => Din_tb, WE => WE_tb,
       RST => RST_tb, Rs1_out => Rs1_out_tb, Rs2_out => Rs2_out_tb);
 

@@ -17,11 +17,12 @@ architecture Behavioral of mux21_tb is
     signal sel_tb : std_logic;
     signal a_tb : std_logic_vector(15 downto 0) := "0000000000001010";
     signal b_tb : std_logic_vector(15 downto 0) := "0000000000001011";
+    signal c_tb : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
     UUT : mux21 port map (
-        sel=>sel_tb, a=>a_tb, b=>b_tb);
+        sel=>sel_tb, a=>a_tb, b=>b_tb, c => c_tb);
 
     mux_test : process
     begin
