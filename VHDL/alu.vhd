@@ -7,6 +7,7 @@ entity alu is
   generic (
     N : integer := 16);  -- N-bits size of word.
   Port (
+    clk       : in std_logic;
     ALUop     : in std_logic_vector (3 downto 0);  -- ALU operation.
     Op1       : in std_logic_vector (N-1 downto 0);  -- Op1.
     Op2       : in std_logic_vector (N-1 downto 0);  -- Op2.
@@ -29,23 +30,25 @@ begin
   Op1_signal <= signed(Op1);
   Op2_signal <= signed(Op2);
 
-  process(ALUop, Op1_signal, Op2_signal)
+  process(clk, ALUop, Op1_signal, Op2_signal)
     begin
-    case(ALUop) is
-      when "0000" =>  -- Add
-        Dout_signal <= Op1_signal + Op2_signal;
-      when "0001" =>  -- Sub
-        Dout_signal <= Op1_signal - Op2_signal;
-      when "0010" =>  -- AND
-        Dout_signal <= Op1_signal and Op2_signal;
-      when "0011" =>  -- OR
-        Dout_signal <= Op1_signal or Op2_signal;
-      when "0100" =>  -- Shift Left Logical
-        Dout_signal <= Op1_signal sll 1;
-      when "0101" =>  -- Shift Rigt Logical
-        Dout_signal <= Op1_signal srl 1;
-      when others => Dout_signal <= Op1_signal + Op2_signal;
-    end case;
+--    if rising_edge(clk) then
+        case(ALUop) is
+          when "0000" =>  -- Add
+            Dout_signal <= Op1_signal + Op2_signal;
+          when "0001" =>  -- Sub
+            Dout_signal <= Op1_signal - Op2_signal;
+          when "0010" =>  -- AND
+            Dout_signal <= Op1_signal and Op2_signal;
+          when "0011" =>  -- OR
+            Dout_signal <= Op1_signal or Op2_signal;
+          when "0100" =>  -- Shift Left Logical
+            Dout_signal <= Op1_signal sll 1;
+          when "0101" =>  -- Shift Rigt Logical
+            Dout_signal <= Op1_signal srl 1;
+          when others => Dout_signal <= Op1_signal + Op2_signal;
+        end case;
+--     end if;
   end process;
 
   process(Dout_signal)

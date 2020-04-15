@@ -11,7 +11,7 @@ end register_file_tb;
 
 architecture Behavioral of register_file_tb is
     
-    signal clk_tb        : std_logic;
+    signal clk_tb        : std_logic := '0';
     signal Rs1_Addr_tb  : std_logic_vector (M-1 downto 0) := (others => '0');  -- Rs1
     signal Rs2_Addr_tb  : std_logic_vector (M-1 downto 0) := (others => '0');  -- Rs2
     signal Rd_Addr_tb   : std_logic_vector (M-1 downto 0) := (others => '0');  -- Rd
@@ -49,20 +49,26 @@ architecture Behavioral of register_file_tb is
 
 testProc : process
     begin
+    clk_tb <= '1';
     RST_tb <= '1';
     wait for 100 ns;
     RST_tb <= '0';
+    clk_tb <= '0';
     wait for 100 ns;
+    clk_tb <= '1';
     Rd_Addr_tb <= "00000";
     Rs1_Addr_tb <= "00000";
     Rs2_Addr_tb <= "00001";
     WE_tb <= '1';
     wait for 100 ns;
+    clk_tb <= '0';
     WE_tb <= '0';
     Rd_Addr_tb <= "00001";
     wait for 100 ns;
+    clk_tb <= '1';
     WE_tb <= '1';
     wait for 100 ns;
+    clk_tb <= '0';
     WE_tb <= '0';
     wait for 1000 ns;
     end process;
